@@ -26,5 +26,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/constants.ts"]
+  "include": ["src", "src/constants.ts", "src/screens/home/index.tsx"]
 }

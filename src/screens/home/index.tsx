@@ -44,19 +44,53 @@ export default function Home() {
     }
   }, []);
 
+  // const sendData = async () => {
+  //   const canvas = canvasRef.current;
+  //   if (canvas) {
+  //     console.log("Sending data", `${import.meta.env.VITE_API_URL}/calculate`);
+  //     const response = await axios({
+  //       method: "post",
+  //       url: `${import.meta.env.VITE_API_URL}/calculate`,
+  //       data: {
+  //         image: canvas.toDataURL("image/png"),
+  //         dictOfVars: dictOfVars,
+  //       },
+  //     });
+  //     const resp = await response.data;
+  //     console.log("Response: ", resp);
+  //   }
+  // };
   const sendData = async () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const response = await axios({
-        method: "post",
-        url: `${import.meta.env.VITE_API_URL}/calculate`,
-        data: {
-          image: canvas.toDataURL("image/png"),
-          dictOfVars: dictOfVars,
-        },
-      });
-      const resp = await response.data;
-      console.log("Response: ", resp);
+      const payload = {
+        image: canvas.toDataURL("image/png"),
+        dictOfVars: dictOfVars,
+      };
+      console.log(
+        "Sending data to:",
+        `${import.meta.env.VITE_API_URL}/calculate`
+      );
+      console.log("Payload:", payload);
+      try {
+        const response = await axios({
+          method: "post",
+          url: `${import.meta.env.VITE_API_URL}/calculate`,
+          data: payload,
+        });
+        const resp = await response.data;
+        console.log("Response:", resp);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Error response data:", error.response?.data);
+          console.error("Full error response:", error.response);
+          if (error.response?.data?.detail) {
+            console.error("Error details:", error.response.data.detail);
+          }
+        } else {
+          console.error("Error sending data:", error);
+        }
+      }
     }
   };
   const resetCanvas = () => {
